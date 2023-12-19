@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices;
 using System.Reflection.Emit;
-
 public unsafe class CS
 {
     // [StructLayout(LayoutKind.Sequential)]

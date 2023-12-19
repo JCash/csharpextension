@@ -52,3 +52,6 @@ Platform support:
 
 How to create a delegate from the C side, to call C# functions that takes delegates
 * https://github.com/ericsink/native-aot-samples/tree/main/delegate_i32
+
+SmolSharp
+* https://github.com/ascpixi/smolsharp

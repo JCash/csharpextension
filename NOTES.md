@@ -3,14 +3,18 @@
 
 * `-flto`` seems to remove something vital and the exe crashes
 
+    - Can we use e.g. "__attribute__((used))" or similar?
+    - Is there a linker flag to keep symbols? e.g. "ExportsFile" ?
+
 # Questions
 
 * Is it possible to statically link with the dynamic libraries?
 
-    - libSystem.Native.dylib
-    - libSystem.Globalization.Native.dylib
-    - libSystem.IO.Compression.Native.dylib
+    - Yes. Instead of linking as "-lSystem.Native" add them directly as a source file
 
+* Can we avoid using the reflection layer, to save 40% size?
+
+    - Currently using TryGetFunctionPointer fails
 
 Sizes:
 
