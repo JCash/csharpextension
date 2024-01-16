@@ -4,17 +4,6 @@
 
     brew install dotnet
 
-* ILCompiler
-
-https://www.nuget.org/packages/Microsoft.DotNet.ILCompiler
-Required for the toolset to be installed, not the project itself
-
-    (cd NativeLibrary && dotnet add package Microsoft.DotNet.ILCompiler --version 8.0.0)
-
-Reset the project
-
-    git checkout NativeLibrary
-
 ## Build
 
     ./scripts/compile.sh
