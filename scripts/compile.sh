@@ -10,7 +10,12 @@ BUILD_DIR=./build
 
 mkdir -p ${BUILD_DIR}
 
-AOTBASE=${NUGET_DIR}/runtime.osx-arm64.microsoft.dotnet.ilcompiler/8.0.0
+ARCH=arm64
+if [ "i386" == "$(arch)" ]; then
+    ARCH=x64
+fi
+
+AOTBASE=${NUGET_DIR}/runtime.osx-${ARCH}.microsoft.dotnet.ilcompiler/8.0.0
 
 # setup
 # dotnet add ${PROJ} package Microsoft.DotNet.ILCompiler --version 8.0.0
@@ -19,7 +24,7 @@ dotnet clean ${PROJ}
 rm -rf ./NativeLibrary/bin/Release
 
 
-dotnet publish -c Release -r osx-arm64 \
+dotnet publish -c Release -r osx-${ARCH} \
     -p:PublishAot=true \
     -p:NativeLib=Static \
     -p:PublishTrimmed=true \
@@ -41,7 +46,7 @@ ar rcs ${BUILD_DIR}/libclib.a ${BUILD_DIR}/clib.o
 clang++ ${OPT} -o ${BUILD_DIR}/test \
     -L${BUILD_DIR} \
     -lclib \
-    -L./NativeLibrary/bin/Release/net8.0/osx-arm64/native\
+    -L./NativeLibrary/bin/Release/net8.0/osx-${ARCH}/native\
     -lNativeLibrary \
     $AOTBASE/sdk/libbootstrapperdll.o \
     $AOTBASE/sdk/libRuntime.WorkstationGC.a \
