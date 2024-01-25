@@ -34,14 +34,14 @@ dotnet publish -c Release -r osx-${ARCH} \
 # --self-contained \
 # -p:SelfContained=true
 
-OPT=-O2
-OPT="-g -O0"
+# -flto seems to remove something vital and the exe crashes
+OPT="-O2 -flto"
+#OPT="-O2"
+OPT="-g -O0 -flto"
 DOSTRIP=true
 
 clang -c ${OPT} -o ${BUILD_DIR}/clib.o ./src/clib.c
 ar rcs ${BUILD_DIR}/libclib.a ${BUILD_DIR}/clib.o
-
-# -flto seems to remove something vital and the exe crashes
 
 clang++ ${OPT} -o ${BUILD_DIR}/test \
     -L${BUILD_DIR} \
