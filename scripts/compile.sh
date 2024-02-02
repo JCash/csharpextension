@@ -12,6 +12,8 @@ mkdir -p ${BUILD_DIR}
 
 AOTBASE=${NUGET_DIR}/runtime.osx-arm64.microsoft.dotnet.ilcompiler/8.0.0
 
+PUBLISH_DIR=./NativeLibrary/bin/Release/net8.0/osx-arm64/native
+
 # setup
 # dotnet add ${PROJ} package Microsoft.DotNet.ILCompiler --version 8.0.0
 
@@ -23,26 +25,39 @@ dotnet publish -c Release -r osx-arm64 \
     -p:PublishAot=true \
     -p:NativeLib=Static \
     -p:PublishTrimmed=true \
+    -p:IlcDehydrate=false \
      ${PROJ}
 
 # -p:StaticallyLinked=true \
 # --self-contained \
 # -p:SelfContained=true
 
+# patch the library for macos (issue https://github.com/dotnet/runtime/issues/96663)
+#python ./scripts/patch_macho.py ${PUBLISH_DIR}/libNativeLibrary.a
+
+(cd machorepack && cargo build)
+
+./machorepack/target/debug/machorepack ${PUBLISH_DIR}/libNativeLibrary.a ${BUILD_DIR}/libNativeLibraryPatched.a
+
+
 OPT=-O2
 OPT="-g -O0"
+#OPT="-g -O2 -flto"
 DOSTRIP=true
+
+MIN_OSX_VERSION=11.0
 
 clang -c ${OPT} -o ${BUILD_DIR}/clib.o ./src/clib.c
 ar rcs ${BUILD_DIR}/libclib.a ${BUILD_DIR}/clib.o
 
 # -flto seems to remove something vital and the exe crashes
+# -force_load instead of --whole-archive and --no-whole-archive
 
 clang++ ${OPT} -o ${BUILD_DIR}/test \
     -L${BUILD_DIR} \
     -lclib \
-    -L./NativeLibrary/bin/Release/net8.0/osx-arm64/native\
-    -lNativeLibrary \
+    -ldlib \
+    -lNativeLibraryPatched \
     $AOTBASE/sdk/libbootstrapperdll.o \
     $AOTBASE/sdk/libRuntime.WorkstationGC.a \
     $AOTBASE/sdk/libeventpipe-enabled.a \

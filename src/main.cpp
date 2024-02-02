@@ -6,6 +6,7 @@ extern "C" {
 
 extern "C" int libNativeLibrary_CS__CsAdd(int a, int b);
 extern "C" int libNativeLibrary_CS__CsDivide(int a, int b);
+extern "C" int libNativeLibrary_CS__CsRegisterExtension();
 
 int main(int argc, char** argv)
 {
@@ -15,6 +16,7 @@ int main(int argc, char** argv)
     printf("DIV: %d = %d + %d (C++ -> C# -> C)\n", libNativeLibrary_CS__CsDivide(a,b), a, b);
     printf("MUL: %d = %d + %d (C++ -> C)\n", Multiply(a,b), a, b);
 
+    libNativeLibrary_CS__CsRegisterExtension();
     ExtensionsInit();
 
     ExtensionUpdateParams p = {.frame = 0};
