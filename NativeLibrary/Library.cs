@@ -88,7 +88,7 @@ public unsafe class CS
 
         UInt64 hash = dmSDK.dmHashString64("hello");
 
-        Console.WriteLine(String.Format("HASH(hello): {0}", hash));
+        Console.WriteLine(String.Format("dmSDK.dmHashString64(\"hello\"): {0}", hash));
     }
 
     [UnmanagedCallersOnly(EntryPoint = "CsRegisterExtension")]

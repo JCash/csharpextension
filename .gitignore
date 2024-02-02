@@ -1,3 +1,5 @@
 /NativeLibrary/bin/
 /NativeLibrary/obj/
 /build/
+/machorepack/target/
+*.lock

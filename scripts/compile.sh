@@ -10,9 +10,14 @@ BUILD_DIR=./build
 
 mkdir -p ${BUILD_DIR}
 
-AOTBASE=${NUGET_DIR}/runtime.osx-arm64.microsoft.dotnet.ilcompiler/8.0.0
+ARCH=arm64
+if [ "i386" == "$(arch)" ]; then
+    ARCH=x64
+fi
 
-PUBLISH_DIR=./NativeLibrary/bin/Release/net8.0/osx-arm64/native
+AOTBASE=${NUGET_DIR}/runtime.osx-${ARCH}.microsoft.dotnet.ilcompiler/8.0.0
+
+PUBLISH_DIR=./NativeLibrary/bin/Release/net8.0/osx-${ARCH}/native
 
 # setup
 # dotnet add ${PROJ} package Microsoft.DotNet.ILCompiler --version 8.0.0
@@ -21,7 +26,7 @@ dotnet clean ${PROJ}
 rm -rf ./NativeLibrary/bin/Release
 
 
-dotnet publish -c Release -r osx-arm64 \
+dotnet publish -c Release -r osx-${ARCH} \
     -p:PublishAot=true \
     -p:NativeLib=Static \
     -p:PublishTrimmed=true \

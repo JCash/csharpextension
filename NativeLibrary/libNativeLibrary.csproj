@@ -34,4 +34,8 @@
     <!-- <NativeLibrary Include="$(MSBuildThisFileDirectory)/../build/libclib.a" /> -->
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="8.0.0" />
+  </ItemGroup>
+
 </Project>
