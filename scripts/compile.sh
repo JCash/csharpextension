@@ -52,7 +52,7 @@ DOSTRIP=true
 
 MIN_OSX_VERSION=11.0
 
-clang -c ${OPT} -o ${BUILD_DIR}/clib.o ./src/clib.c
+clang -c ${OPT} -I./src/external -o ${BUILD_DIR}/clib.o ./src/clib.c
 ar rcs ${BUILD_DIR}/libclib.a ${BUILD_DIR}/clib.o
 
 # -flto seems to remove something vital and the exe crashes

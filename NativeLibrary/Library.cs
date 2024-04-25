@@ -68,6 +68,9 @@ public unsafe class CS
         ++params_obj.f32;
         ++params_obj.f64;
 
+        Lua.PushNumber(params_obj.L, 14);
+        Lua.SetField(params_obj.L, -2, "csharp_value");
+
         Marshal.StructureToPtr(params_obj, new IntPtr(update_params), true);
 
         ++ctx.update;

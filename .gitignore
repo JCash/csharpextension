@@ -3,3 +3,4 @@
 /build/
 /machorepack/target/
 *.lock
+/src/external/

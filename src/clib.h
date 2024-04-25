@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+#include "lua/lualib.h"
+#include "lua/lauxlib.h"
+
 int Multiply(int a, int b);
 int Divide(int a, int b);
 
@@ -18,6 +21,8 @@ typedef struct ExtensionUpdateParams
     uint32_t    u32;
     float       f32;
     double      f64;
+
+    lua_State*  L;
 } ExtensionUpdateParams;
 
 #pragma pack(pop)

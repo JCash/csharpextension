@@ -27,6 +27,8 @@ public unsafe class dmSDK
         public float        f32;
         [FieldOffset(15)]
         public double       f64;
+        [FieldOffset(23)]
+        public Lua.State*   L;
     }
 
     [DllImport("clib", CallingConvention = CallingConvention.Cdecl)]

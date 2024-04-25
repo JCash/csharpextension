@@ -11,6 +11,24 @@ extern "C" int libNativeLibrary_CS__CsAdd(int a, int b);
 extern "C" int libNativeLibrary_CS__CsDivide(int a, int b);
 extern "C" int libNativeLibrary_CS__CsRegisterExtension();
 
+void print_table(lua_State* L)
+{
+    if ((lua_type(L, -2) == LUA_TSTRING))
+        printf("%s", lua_tostring(L, -2));
+
+    lua_pushnil(L);
+    while(lua_next(L, -2) != 0) {
+        if(lua_isstring(L, -1))
+            printf("  %s = %s\n", lua_tostring(L, -2), lua_tostring(L, -1));
+        else if(lua_isnumber(L, -1))
+            printf("  %s = %f\n", lua_tostring(L, -2), lua_tonumber(L, -1));
+        else if(lua_istable(L, -1)) {
+            print_table(L);
+        }
+        lua_pop(L, 1);
+    }
+}
+
 int main(int argc, char** argv)
 {
     int a = 7;
@@ -36,6 +54,7 @@ int main(int argc, char** argv)
     p.frame = 0;
     p.f32   = 0.5f;
     p.f64   = 1.5;
+    p.L     = L;
 
     printf("BEFORE (C)\n");
     printf("  frame: %d\n", p.frame);
@@ -52,11 +71,21 @@ int main(int argc, char** argv)
     // printf("  offsetof: u32 %lu\n", offsetof(ExtensionUpdateParams, u32));
     // printf("  offsetof: f32 %lu\n", offsetof(ExtensionUpdateParams, f32));
     // printf("  offsetof: f64 %lu\n", offsetof(ExtensionUpdateParams, f64));
+    printf("  offsetof: L %lu\n", offsetof(ExtensionUpdateParams, L));
+
+    lua_newtable(L);
+
+    lua_pushnumber(L, 17);
+    lua_setfield(L, -2, "c_value");
 
     for (int i = 0; i < 3; ++i, ++p.frame)
     {
         ExtensionsUpdate(&p);
     }
+
+    printf("Lua Table (C)\n");
+    print_table(L);
+    printf("\n");
 
     printf("AFTER (C)\n");
     printf("  frame: %d\n", p.frame);
