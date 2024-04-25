@@ -1,14 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 using System.Reflection.Emit;
+
+using System.Reflection; // fieldinfo
+
 public unsafe class CS
 {
-    // [StructLayout(LayoutKind.Sequential)]
-    // public class Person
-    // {
-    //     public int Age { get; set; }
-    //     public Gender Gender { get; set; }
-    // }
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int ExtensionCallbackInit(ref CSExtensionContext ctx);
 
@@ -51,8 +47,29 @@ public unsafe class CS
 
     static private int CSExtensionUpdate(ref CSExtensionContext ctx, dmSDK.ExtensionUpdateParams* update_params)
     {
-        int frame = dmSDK.ExtensionParamsGetFrame(update_params);
-        Console.WriteLine(String.Format("    CS: Extension Update! ctx: {0}  frame: {1}", ctx.update, frame));
+        // int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(dmSDK.ExtensionUpdateParams));
+        // Console.WriteLine(String.Format("    CS:   struct: size: {0}", size));
+        // Console.WriteLine(String.Format("    CS:   struct: size: {0}", System.Runtime.InteropServices.Marshal.SizeOf(typeof(dmSDK.ExtensionUpdateParams))));
+        // Console.WriteLine(String.Format("    CS:   field:  frame: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "frame")));
+        // Console.WriteLine(String.Format("    CS:   field:  u8: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "u8")));
+        // Console.WriteLine(String.Format("    CS:   field:  u16: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "u16")));
+        // Console.WriteLine(String.Format("    CS:   field:  u32: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "u32")));
+        // Console.WriteLine(String.Format("    CS:   field:  f32: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "f32")));
+        // Console.WriteLine(String.Format("    CS:   field:  f64: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "f64")));
+
+        Console.WriteLine("POINTER: {0}", new IntPtr(update_params));
+
+        dmSDK.ExtensionUpdateParams params_obj = new dmSDK.ExtensionUpdateParams();
+        Marshal.PtrToStructure(new IntPtr(update_params), params_obj);
+
+        ++params_obj.u8;
+        ++params_obj.u16;
+        ++params_obj.u32;
+        ++params_obj.f32;
+        ++params_obj.f64;
+
+        Marshal.StructureToPtr(params_obj, new IntPtr(update_params), true);
+
         ++ctx.update;
         return 0;
     }

@@ -9,10 +9,24 @@ public unsafe class dmSDK
         // opaque class
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    // examples: https://stackoverflow.com/questions/11968960/how-use-pinvoke-for-c-struct-array-pointer-to-c-sharp
+    // field offset: https://stackoverflow.com/questions/8757855/getting-pointer-to-struct-inside-itself-unsafe-context
+
+    [StructLayout(LayoutKind.Explicit, Size=23, CharSet = CharSet.Ansi)]
     public class ExtensionUpdateParams
     {
-        // opaque class
+        [FieldOffset(0)]
+        public int          frame;
+        [FieldOffset(4)]
+        public byte         u8;
+        [FieldOffset(5)]
+        public ushort       u16;
+        [FieldOffset(7)]
+        public uint         u32;
+        [FieldOffset(11)]
+        public float        f32;
+        [FieldOffset(15)]
+        public double       f64;
     }
 
     [DllImport("clib", CallingConvention = CallingConvention.Cdecl)]

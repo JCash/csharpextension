@@ -1,16 +1,26 @@
 #pragma once
 
+#include <stdint.h>
+
 int Multiply(int a, int b);
 int Divide(int a, int b);
 
+#pragma pack(push, 1)
 
 struct Extension;
 typedef struct Extension Extension;
 
 typedef struct ExtensionUpdateParams
 {
-    int frame;
+    int         frame;
+    uint8_t     u8;
+    uint16_t    u16;
+    uint32_t    u32;
+    float       f32;
+    double      f64;
 } ExtensionUpdateParams;
+
+#pragma pack(pop)
 
 int ExtensionParamsGetFrame(const ExtensionUpdateParams* p);
 
