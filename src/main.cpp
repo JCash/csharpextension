@@ -3,6 +3,8 @@
 
 extern "C" {
 #include "clib.h"
+#include "lua/lualib.h"
+#include "lua/lauxlib.h"
 }
 
 extern "C" int libNativeLibrary_CS__CsAdd(int a, int b);
@@ -19,6 +21,11 @@ int main(int argc, char** argv)
 
     libNativeLibrary_CS__CsRegisterExtension();
     ExtensionsInit();
+
+    lua_State* L = luaL_newstate();
+    luaL_openlibs(L);
+    luaL_loadstring(L, "print('Hello from Lua')");
+    lua_pcall(L, 0, LUA_MULTRET, 0);
 
     ExtensionUpdateParams p = {.frame = 0};
     printf("sizeof(ExtensionUpdateParams) == %zu\n", sizeof(ExtensionUpdateParams));

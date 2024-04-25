@@ -59,9 +59,11 @@ ar rcs ${BUILD_DIR}/libclib.a ${BUILD_DIR}/clib.o
 # -force_load instead of --whole-archive and --no-whole-archive
 
 clang++ ${OPT} -o ${BUILD_DIR}/test \
+    -I./src/external \
     -L${BUILD_DIR} \
     -lclib \
     -ldlib \
+    -llua51 \
     -lNativeLibraryPatched \
     $AOTBASE/sdk/libbootstrapperdll.o \
     $AOTBASE/sdk/libRuntime.WorkstationGC.a \

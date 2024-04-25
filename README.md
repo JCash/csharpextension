@@ -4,6 +4,11 @@
 
     brew install dotnet
 
+## Install prerequisites
+
+    ./scripts/install_external.sh
+    ./scripts/compile_external.sh
+
 ## Build
 
     ./scripts/compile.sh
