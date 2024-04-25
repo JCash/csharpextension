@@ -16,5 +16,21 @@ public unsafe class Lua
     public static extern void PushNumber(State* L, double f);
 
     [DllImport("lua51", CallingConvention = CallingConvention.Cdecl, EntryPoint="lua_setfield")]
-    public static extern void SetField(State* L, int index, String name);
+    public static extern void SetField(State* L, int idx, String name);
+
+    [DllImport("lua51", CallingConvention = CallingConvention.Cdecl, EntryPoint="lua_createtable")]
+    public static extern void CreateTable(State* L, int narr, int nrec);
+
+    [DllImport("lua51", CallingConvention = CallingConvention.Cdecl, EntryPoint="lua_settop")]
+    public static extern void SetTop(State* L, int idx);
+
+    public static void NewTable(State* L)
+    {
+        CreateTable(L, 0, 0);
+    }
+
+    public static void Pop(State* L, int n)
+    {
+        SetTop(L, -(n)-1);
+    }
 }

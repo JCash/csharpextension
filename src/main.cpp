@@ -11,19 +11,37 @@ extern "C" int libNativeLibrary_CS__CsAdd(int a, int b);
 extern "C" int libNativeLibrary_CS__CsDivide(int a, int b);
 extern "C" int libNativeLibrary_CS__CsRegisterExtension();
 
-void print_table(lua_State* L)
+static void print_indent(int indent)
+{
+    for (int i = 0; i < indent; ++i)
+    {
+        printf("    ");
+    }
+}
+
+static void print_table(lua_State* L, int indent)
 {
     if ((lua_type(L, -2) == LUA_TSTRING))
-        printf("%s", lua_tostring(L, -2));
+    {
+        print_indent(indent);
+        printf("%s\n", lua_tostring(L, -2));
+    }
 
     lua_pushnil(L);
     while(lua_next(L, -2) != 0) {
         if(lua_isstring(L, -1))
-            printf("  %s = %s\n", lua_tostring(L, -2), lua_tostring(L, -1));
+        {
+            print_indent(indent);
+            printf("%s = %s\n", lua_tostring(L, -2), lua_tostring(L, -1));
+        }
         else if(lua_isnumber(L, -1))
-            printf("  %s = %f\n", lua_tostring(L, -2), lua_tonumber(L, -1));
-        else if(lua_istable(L, -1)) {
-            print_table(L);
+        {
+            print_indent(indent);
+            printf("%s = %f\n", lua_tostring(L, -2), lua_tonumber(L, -1));
+        }
+        else if(lua_istable(L, -1))
+        {
+            print_table(L, indent+1);
         }
         lua_pop(L, 1);
     }
@@ -84,7 +102,7 @@ int main(int argc, char** argv)
     }
 
     printf("Lua Table (C)\n");
-    print_table(L);
+    print_table(L, 1);
     printf("\n");
 
     printf("AFTER (C)\n");

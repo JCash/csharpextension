@@ -71,6 +71,13 @@ public unsafe class CS
         Lua.PushNumber(params_obj.L, 14);
         Lua.SetField(params_obj.L, -2, "csharp_value");
 
+        Lua.NewTable(params_obj.L);
+
+            Lua.PushNumber(params_obj.L, 4);
+            Lua.SetField(params_obj.L, -2, "csharp_subvalue");
+
+        Lua.SetField(params_obj.L, -2, "csharp_subtable");
+
         Marshal.StructureToPtr(params_obj, new IntPtr(update_params), true);
 
         ++ctx.update;
