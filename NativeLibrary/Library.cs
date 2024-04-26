@@ -9,7 +9,7 @@ public unsafe class CS
     public delegate int ExtensionCallbackInit(ref CSExtensionContext ctx);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int ExtensionCallbackUpdate(ref CSExtensionContext ctx, dmSDK.ExtensionUpdateParams* update_params);
+    public delegate int ExtensionCallbackUpdate(ref CSExtensionContext ctx, ref dmSDK.ExtensionUpdateParams update_params);
 
     public class CSExtensionContext
     {
@@ -45,7 +45,7 @@ public unsafe class CS
         return 0;
     }
 
-    static private int CSExtensionUpdate(ref CSExtensionContext ctx, dmSDK.ExtensionUpdateParams* update_params)
+    static private int CSExtensionUpdate(ref CSExtensionContext ctx, ref dmSDK.ExtensionUpdateParams update_params)
     {
         // int size = System.Runtime.InteropServices.Marshal.SizeOf(typeof(dmSDK.ExtensionUpdateParams));
         // Console.WriteLine(String.Format("    CS:   struct: size: {0}", size));
@@ -56,29 +56,23 @@ public unsafe class CS
         // Console.WriteLine(String.Format("    CS:   field:  u32: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "u32")));
         // Console.WriteLine(String.Format("    CS:   field:  f32: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "f32")));
         // Console.WriteLine(String.Format("    CS:   field:  f64: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "f64")));
+        // Console.WriteLine(String.Format("    CS:   field:  L: {0}", System.Runtime.InteropServices.Marshal.OffsetOf(typeof(dmSDK.ExtensionUpdateParams), "L")));
 
-        Console.WriteLine("POINTER: {0}", new IntPtr(update_params));
+        ++update_params.u8;
+        ++update_params.u16;
+        ++update_params.u32;
+        ++update_params.f32;
+        ++update_params.f64;
 
-        dmSDK.ExtensionUpdateParams params_obj = new dmSDK.ExtensionUpdateParams();
-        Marshal.PtrToStructure(new IntPtr(update_params), params_obj);
+        Lua.PushNumber(update_params.L, 14);
+        Lua.SetField(update_params.L, -2, "csharp_value");
 
-        ++params_obj.u8;
-        ++params_obj.u16;
-        ++params_obj.u32;
-        ++params_obj.f32;
-        ++params_obj.f64;
+        Lua.NewTable(update_params.L);
 
-        Lua.PushNumber(params_obj.L, 14);
-        Lua.SetField(params_obj.L, -2, "csharp_value");
+            Lua.PushNumber(update_params.L, 4);
+            Lua.SetField(update_params.L, -2, "csharp_subvalue");
 
-        Lua.NewTable(params_obj.L);
-
-            Lua.PushNumber(params_obj.L, 4);
-            Lua.SetField(params_obj.L, -2, "csharp_subvalue");
-
-        Lua.SetField(params_obj.L, -2, "csharp_subtable");
-
-        Marshal.StructureToPtr(params_obj, new IntPtr(update_params), true);
+        Lua.SetField(update_params.L, -2, "csharp_subtable");
 
         ++ctx.update;
         return 0;

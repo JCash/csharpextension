@@ -83,13 +83,14 @@ int main(int argc, char** argv)
     printf("  f64: %f\n", p.f64);
 
     // printf("C POINTER: %lld  %llu\n", (long long)&p, (unsigned long long)&p);
+    // printf("  size: %lu\n", sizeof(ExtensionUpdateParams));
     // printf("  offsetof: frame %lu\n", offsetof(ExtensionUpdateParams, frame));
     // printf("  offsetof: u8 %lu\n", offsetof(ExtensionUpdateParams, u8));
     // printf("  offsetof: u16 %lu\n", offsetof(ExtensionUpdateParams, u16));
     // printf("  offsetof: u32 %lu\n", offsetof(ExtensionUpdateParams, u32));
     // printf("  offsetof: f32 %lu\n", offsetof(ExtensionUpdateParams, f32));
     // printf("  offsetof: f64 %lu\n", offsetof(ExtensionUpdateParams, f64));
-    printf("  offsetof: L %lu\n", offsetof(ExtensionUpdateParams, L));
+    // printf("  offsetof: L %lu\n", offsetof(ExtensionUpdateParams, L));
 
     lua_newtable(L);
 
