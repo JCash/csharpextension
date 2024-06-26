@@ -39,8 +39,8 @@ public unsafe class dmSDK
     [DllImport("clib", CallingConvention = CallingConvention.Cdecl)]
     public static extern int ExtensionParamsGetFrame(ExtensionUpdateParams* update_params);
 
-    [DllImport("dlib", CallingConvention = CallingConvention.Cdecl)]
-    public static extern UInt64 dmHashString64(string buffer);
+    // [DllImport("dlib", CallingConvention = CallingConvention.Cdecl)]
+    // public static extern UInt64 dmHashString64(string buffer);
 
     public static bool TryGetFunctionPointer(Delegate d, out void* pointer)
     {

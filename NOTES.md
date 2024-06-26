@@ -23,3 +23,10 @@ Sizes:
 144672 libSystem.Native.dylib
 156096 libSystem.Globalization.Native.dylib
 888640 libSystem.IO.Compression.Native.dylib
+
+
+
+Notes for configurability:
+
+"If you set InvariantGlobalization in your csproj to true, then it’ll skip using ICU."
+

@@ -107,9 +107,9 @@ public unsafe class CS
             dmSDK.ExtensionAddUpdateFunc(extension, (IntPtr)pfn);
         }
 
-        UInt64 hash = dmSDK.dmHashString64("hello");
+        // UInt64 hash = dmSDK.dmHashString64("hello");
 
-        Console.WriteLine(String.Format("dmSDK.dmHashString64(\"hello\"): {0}", hash));
+        // Console.WriteLine(String.Format("dmSDK.dmHashString64(\"hello\"): {0}", hash));
     }
 
     [UnmanagedCallersOnly(EntryPoint = "CsRegisterExtension")]
@@ -125,4 +125,8 @@ public unsafe class CS
     //     Console.WriteLine("STATIC CONSTRUCTOR!");
     //     CsRegisterExtensionInternal();
     // }
+
+    static void Main(string[] args)
+    {
+    }
 }
