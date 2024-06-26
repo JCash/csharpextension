@@ -1,8 +1,8 @@
 ## Prerequisites
 
-* DotNet 8
+* DotNet 9
 
-    brew install dotnet
+    brew install dotnet-sdk@preview
 
 ## Install prerequisites
 
@@ -11,11 +11,21 @@
 
 ## Build
 
+macOS
+
+    ./scripts/compile_external.sh macos
     ./scripts/compile.sh
+
+iOS
+
+    ./scripts/compile_external.sh ios
+    ./scripts/compile_ios.sh ios
 
 ## Run
 
-    ./scripts/run.sh
+macOS
+
+    ./build/macos/test
 
 
 ## Links
