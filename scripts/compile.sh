@@ -17,7 +17,11 @@ BUILD_DIR=./build/${PLATFORM}
 
 mkdir -p ${BUILD_DIR}
 
-OS=ios
+OS=${PLATFORM}
+if [ "macos" == "${OS}" ]; then
+    OS=osx
+fi
+
 ARCH=arm64
 if [ "i386" == "$(arch)" ]; then
     ARCH=x64
@@ -26,7 +30,11 @@ fi
 DOTNET_MAJOR_VERSION=$(dotnet --info | dotnet --version | awk -F'.' '{print $1}')
 DOTNET_SDK_VERSION=$(dotnet --info | python -c "import sys; lns = sys.stdin.readlines(); i = lns.index('Host:\n'); print(lns[i+1].strip().split()[1])")
 
-AOTBASE=${NUGET_DIR}/microsoft.netcore.app.runtime.nativeaot.${OS}-${ARCH}/${DOTNET_SDK_VERSION}/runtimes/${OS}-${ARCH}/native/
+if [ "osx" == "${OS}" ]; then
+    AOTBASE=${NUGET_DIR}/microsoft.netcore.app.runtime.nativeaot.${OS}-${ARCH}/${DOTNET_SDK_VERSION}/runtimes/${OS}-${ARCH}/native/
+else
+    AOTBASE=${NUGET_DIR}/microsoft.netcore.app.runtime.nativeaot.${OS}-${ARCH}/${DOTNET_SDK_VERSION}/runtimes/${OS}-${ARCH}/native/
+fi
 echo AOTBASE=${AOTBASE}
 
 PUBLISH_DIR=./NativeLibrary/bin/Release/net${DOTNET_MAJOR_VERSION}.0/${OS}-${ARCH}/native
