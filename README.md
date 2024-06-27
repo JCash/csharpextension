@@ -4,62 +4,26 @@
 
     brew install dotnet-sdk@preview
 
-## Install prerequisites
-
-    ./scripts/install_external.sh
-    ./scripts/compile_external.sh
-
 ## Build
-
-macOS
-
-    ./scripts/compile_external.sh macos
-    ./scripts/compile.sh
 
 iOS
 
-    ./scripts/compile_external.sh ios
-    ./scripts/compile_ios.sh ios
+    ./scripts/compile.sh ios
 
-## Run
+## Error
 
-macOS
+Observe the error in the output log:
+```bash
+users/mawe/csharpextension $ ./scripts/compile.sh ios                                                  [dotnet-9-ios] 10:05:47
+AOTBASE=/Users/mathiaswesterdahl/.nuget/packages/microsoft.netcore.app.runtime.nativeaot.ios-arm64/9.0.0-preview.5.24306.7/runtimes/ios-arm64/native/
+PUBLISH_DIR=./NativeLibrary/bin/Release/net9.0/ios-arm64/native
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
 
-    ./build/macos/test
+Build succeeded in 0,2s
+Restore complete (0,3s)
+You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy
+  libNativeLibrary failed with 1 error(s) (0,2s)
+    CSC : error CS5001: Program does not contain a static 'Main' method suitable for an entry point
 
-
-## Links
-
-* https://github.com/dotnet/samples/blob/main/core/nativeaot/NativeLibrary/README.md
-
-* https://learn.microsoft.com/en-gb/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows#limitations-of-native-aot-deployment
-
-About some limitations:
-* https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows#limitations-of-native-aot-deployment
-* https://devblogs.microsoft.com/dotnet/creating-aot-compatible-libraries/
-
-* https://joeysenna.com/posts/nativeaot-in-c-plus-plus
-
-* https://github.com/Joey0x646576/nativeaot-to-cplusplus-example/blob/main/NativeAot/NativeDll/Library.cs
-
-Marshalling:
-* https://learn.microsoft.com/en-us/cpp/dotnet/using-cpp-interop-implicit-pinvoke?view=msvc-170#in-this-section
-
-* https://mark-borg.github.io/blog/2017/interop/
-
-Short example
-* https://ericsink.com/native_aot/mul_cpp_win_static.html
-
-Compile example:
-* https://github.com/ericsink/native-aot-samples/blob/main/mul_cpp_win_static/build.bat
-
-Platform support:
-(experimental, apart from Desktop)
-
-* https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows#platformarchitecture-restrictions
-
-How to create a delegate from the C side, to call C# functions that takes delegates
-* https://github.com/ericsink/native-aot-samples/tree/main/delegate_i32
-
-SmolSharp
-* https://github.com/ascpixi/smolsharp
+Build failed with 1 error(s) in 0,7s
+```

@@ -11,37 +11,5 @@
     <NativeLib>Static</NativeLib>
     <OutputType>Library</OutputType>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-
-    <!--
-		<NoStdLib>true</NoStdLib>
-		<NoConfig>true</NoConfig>
-		<DebugType>none</DebugType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-		<ImplicitUsings>disable</ImplicitUsings>
-    <Optimize>true</Optimize>
-		<OptimizationPreference>Size</OptimizationPreference> -->
-
-    <!-- Most decrease in size, but also we need it for the reflection between C++/C# -->
-		<!-- <IlcDisableReflection>true</IlcDisableReflection> -->
-
-    <!-- <StackTraceSupport>false</StackTraceSupport> -->
-		<!-- <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData> -->
-		<!-- <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies> -->
-		<!-- <IlcDehydrate>false</IlcDehydrate> -->
   </PropertyGroup>
-
-  <ItemGroup>
-    <!-- <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="8.0.0" /> -->
-    <DirectPInvoke Include="clib" />
-    <DirectPInvoke Include="dlib" />
-    <DirectPInvoke Include="lua51" />
-    <!-- <NativeLibrary Include="clibfoo.a" Condition="!$(RuntimeIdentifier.StartsWith('win'))" /> -->
-    <!-- <NativeLibrary Include="$(MSBuildThisFileDirectory)/../build/libclib.a" /> -->
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="8.0.0" /> -->
-  </ItemGroup>
-
 </Project>
