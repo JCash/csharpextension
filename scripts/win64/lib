@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+wine ${WINDOWS_VCINSTALLDIR_2022}/bin/Hostx64/x64/lib.exe $*
