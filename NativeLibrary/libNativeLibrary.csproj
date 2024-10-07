@@ -8,9 +8,12 @@
     <PublishAot>true</PublishAot>
     <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
     <HybridGlobalization>true</HybridGlobalization>
-    <NativeLib>Static</NativeLib>
     <OutputType>Library</OutputType>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+
+    <NativeLib>static</NativeLib>
+    <IlcUseEnvironmentalTools>True</IlcUseEnvironmentalTools>
+    <DisableUnsupportedError>True</DisableUnsupportedError>
 
     <!--
 		<NoStdLib>true</NoStdLib>

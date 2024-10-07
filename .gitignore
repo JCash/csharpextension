@@ -4,3 +4,6 @@
 /machorepack/target/
 *.lock
 /src/external/
+.nuget
+*.DS_Store
+**/.local
