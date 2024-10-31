@@ -1,5 +1,7 @@
 /NativeLibrary/bin/
 /NativeLibrary/obj/
+/Sdk/bin/
+/Sdk/obj/
 /build/
 /machorepack/target/
 *.lock
@@ -7,3 +9,4 @@
 .nuget
 *.DS_Store
 **/.local
+defoldsdk*

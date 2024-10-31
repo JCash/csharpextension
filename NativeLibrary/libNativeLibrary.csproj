@@ -41,10 +41,11 @@
     <DirectPInvoke Include="lua51" />
     <!-- <NativeLibrary Include="clibfoo.a" Condition="!$(RuntimeIdentifier.StartsWith('win'))" /> -->
     <!-- <NativeLibrary Include="$(MSBuildThisFileDirectory)/../build/libclib.a" /> -->
-  </ItemGroup>
 
-  <ItemGroup>
-    <!-- <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="8.0.0" /> -->
+    <DirectPInvoke Include="extension" />
+
+    <!-- <ProjectReference Include="../Sdk/dmsdk.csproj" /> -->
+    <ProjectReference Include="../defoldsdk/sdk/cs/dmsdk/dmsdk.csproj" />
   </ItemGroup>
 
 </Project>
