@@ -5,7 +5,7 @@ set -e
 # https://github.com/dotnet/samples/blob/main/core/nativeaot/NativeLibrary/README.md
 
 PROJ=./NativeLibrary/libNativeLibrary.csproj
-NUGET_PACKAGES=$(echo .nuget/packages)
+NUGET_PACKAGES=.nuget/packages
 
 PLATFORM=$1
 if [ "" == "${PLATFORM}" ]; then
@@ -16,6 +16,11 @@ fi
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PROJECT_DIR=$(dirname ${SCRIPT_DIR})
+
+function run {
+    echo "RUN: $*"
+    $*
+}
 
 WINE=
 DOTNET=dotnet
@@ -53,7 +58,7 @@ BUILD_DIR=./build/${PLATFORM}
 
 mkdir -p ${BUILD_DIR}
 mkdir -p ${NUGET_PACKAGES}
-NUGET_PACKAGES=$(realpath ${NUGET_PACKAGES})
+export NUGET_PACKAGES=${SCRIPT_DIR}/${NUGET_PACKAGES}
 echo "NUGET_PACKAGES=${NUGET_PACKAGES}"
 
 echo "DOTNET=${DOTNET}"
@@ -76,6 +81,11 @@ if [ "" == "${DOTNET_SDK_VERSION}" ]; then
 fi
 echo "DOTNET_SDK_VERSION=${DOTNET_SDK_VERSION}"
 
+echo "******************************************************************************************"
+dotnet nuget locals all --list
+echo "******************************************************************************************"
+
+
 AOTBASE=${NUGET_PACKAGES}/microsoft.netcore.app.runtime.nativeaot.${DOTNET_RID}/${DOTNET_SDK_VERSION}/runtimes/${DOTNET_RID}/native
 echo AOTBASE=${AOTBASE}
 
@@ -87,11 +97,12 @@ rm -rf ./NativeLibrary/bin
 rm -rf ./Sdk/obj
 rm -rf ./Sdk/bin
 
-${WINE} ${DOTNET} clean -v diag  ${PROJ}
+#un ${WINE} ${DOTNET} clean -v diag  ${PROJ}
 echo "Cleaned"
 
-${WINE} ${DOTNET} publish -v diag -c Release -r ${DOTNET_RID} /bl:aot.binlog  ${PROJ}
+run ${WINE} ${DOTNET} publish -v diag -c Release -r ${DOTNET_RID} /bl:aot.binlog  ${PROJ}
 
+set +e
 
 #OPT=-O2
 #OPT="-g -O0"
@@ -117,6 +128,10 @@ END_GROUP_STATIC=
 
 DEFOLDSDK=defoldsdk
 
+CXX=clang++
+CC=clang
+AR=ar
+
 if [ ${PLATFORM} == "macos" ]; then
     FLAGS="-arch ${CLANG_ARCH} -target arm-apple-darwin19 -m64"
 
@@ -124,7 +139,7 @@ if [ ${PLATFORM} == "macos" ]; then
     LINKER_FLAGS="-framework Foundation ${LINKER_FLAGS}"
 
     EXTRA_CS_LIBS="${AOTBASE}/${PREFIX_LIB}System.Native${SUFFIX_LIB} ${EXTRA_CS_LIBS}"
-    EXTRA_CS_LIBS="${AOTBASE}/${PREFIX_LIB}Runtime.VxsortEnabled${SUFFIX_LIB} ${EXTRA_CS_LIBS}"
+    #EXTRA_CS_LIBS="${AOTBASE}/${PREFIX_LIB}Runtime.VxsortEnabled${SUFFIX_LIB} ${EXTRA_CS_LIBS}"
 
 
 elif [ "${PLATFORM}" == "ios" ]; then
@@ -193,8 +208,24 @@ echo "Using CXX=${CXX}"
 echo "Using CC=${CC}"
 echo "Using AR=${AR}"
 
-${CC} -c ${OPT} ${FLAGS} ${DEFINES} ${INCLUDES} -o ${BUILD_DIR}/clib${SUFFIX_OBJ} ./src/clib.c
-${AR} rcs ${BUILD_DIR}/${PREFIX_LIB}clib${SUFFIX_LIB} ${BUILD_DIR}/clib${SUFFIX_OBJ}
+if [ -z "${CXX}" ]; then
+    echo "You must specify a CXX variable"
+    exit 1
+fi
+
+if [ -z "${CC}" ]; then
+    echo "You must specify a CC variable"
+    exit 1
+fi
+
+if [ -z "${AR}" ]; then
+    echo "You must specify a AR variable"
+    exit 1
+fi
+
+
+run ${CC} -c ${OPT} ${FLAGS} ${DEFINES} ${INCLUDES} -o ${BUILD_DIR}/clib${SUFFIX_OBJ} ./src/clib.c
+run ${AR} rcs ${BUILD_DIR}/${PREFIX_LIB}clib${SUFFIX_LIB} ${BUILD_DIR}/clib${SUFFIX_OBJ}
 
 cp -v ${PUBLISH_DIR}/libNativeLibrary${SUFFIX_LIB} ${BUILD_DIR}/${PREFIX_LIB}NativeLibrary${SUFFIX_LIB}
 
@@ -227,7 +258,7 @@ fi
 OUTPUT=${BUILD_DIR}/test${SUFFIX_EXE}
 
 echo "Linking..."
-${CXX} ${OPT} ${FLAGS} ${LINKER_FLAGS} -o ${OUTPUT} \
+run ${CXX} ${OPT} ${FLAGS} ${LINKER_FLAGS} -o ${OUTPUT} \
     ${INCLUDES} \
     ${DEFINES} \
     ${LIBPATHS} \
